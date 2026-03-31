@@ -32,8 +32,6 @@ def _get_model():
             import torch
             from transformers import AutoImageProcessor, SiglipForImageClassification
 
-            os.environ["HF_HOME"] = "C:/tmp/hf_cache"
-
             logger.info("Loading model Ateeqq/ai-vs-human-image-detector...")
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
