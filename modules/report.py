@@ -22,7 +22,7 @@ def generate_full_report(full_result, output_path: Optional[str] = None) -> str:
     lines = [
         "=" * 65,
         "  LAPORAN ANALISIS FORENSIK CITRA DIGITAL",
-        "  Sistem ELA + AI Detection | Kelompok 7 UNIMED 2026",
+        "  Sistem ELA + AI Detection ",
         "=" * 65,
         f"  Tanggal   : {now}",
         f"  File      : {os.path.basename(r.image_path)}",
