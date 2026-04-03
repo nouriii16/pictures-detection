@@ -221,13 +221,6 @@ with st.sidebar:
     multi_q = st.multiselect("Kualitas perbandingan:",
                               [70, 75, 80, 85, 90, 95], default=[70, 80, 90, 95])
 
-    st.divider()
-    st.markdown("""
-    <div style='font-size:.72rem;color:#1e293b;line-height:1.7'>
-    <b style='color:#334155'>Kelompok 7</b><br>
-    Ilmu Komputer — UNIMED 2026<br>
-    Dosen: Dr. Hermawan Syahputra
-    </div>""", unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
