@@ -236,19 +236,18 @@ with st.sidebar:
 
     st.markdown("**Mode Analisis**")
     force_mode = st.selectbox(
-        "Pilih mode:",
+        "🔧 Mode Analisis",
         ["📷 Mode Foto", "📄 Mode Dokumen", "🤖 Otomatis (deteksi jenis gambar)"],
         help="Otomatis: sistem mendeteksi sendiri apakah gambar dokumen atau foto."
     )
 
     st.divider()
-    st.markdown("**Parameter ELA**")
-    quality = st.slider("Kualitas Rekompresi JPEG", 50, 95, 90, 5,
-                        help="Default 90 untuk foto, sistem otomatis pakai 95 untuk dokumen.")
-    amplify = st.slider("Amplifikasi Visualisasi", 5, 30, 15, 1)
+    quality = st.slider("📐 Kualitas Rekompresi JPEG", 50, 95, 90, 5,
+                        help="Kualitas JPEG saat rekompresi. Default 90%.")
+    amplify = st.slider("🔆 Amplifikasi Visualisasi", 5, 30, 15, 1,
+                        help="Penguat error map. Nilai lebih tinggi = perbedaan lebih terlihat.")
 
-    st.markdown("**Multi-Kualitas ELA** *(mode foto)*")
-    multi_q = st.multiselect("Kualitas perbandingan:",
+    multi_q = st.multiselect("📊 Kualitas Multi-ELA (mode foto):",
                               [70, 75, 80, 85, 90, 95], default=[70, 80, 90, 95])
 
     st.divider()
