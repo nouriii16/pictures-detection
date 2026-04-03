@@ -237,7 +237,7 @@ with st.sidebar:
     st.markdown("**Mode Analisis**")
     force_mode = st.selectbox(
         "🔧 Mode Analisis",
-        ["📷 Mode Foto", "📄 Mode Dokumen", "🤖 Otomatis (deteksi jenis gambar)"],
+        ["🤖 Otomatis (deteksi jenis gambar)", "📄 Mode Dokumen", "📷 Mode Foto"],
         help="Otomatis: sistem mendeteksi sendiri apakah gambar dokumen atau foto."
     )
 
