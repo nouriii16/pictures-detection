@@ -9,8 +9,12 @@ Formula: ELA(x, y) = |I_original(x,y) - I_recompressed(x,y)|
 
 Verdict logic:
   MANIPULATED : suspicious_ratio tinggi DAN mean_error tinggi
-  AUTHENTIC   : suspicious_ratio rendah (< 2%) — tidak peduli mean_error
-  UNCERTAIN   : kondisi lainnya
+  AUTHENTIC   : suspicious_ratio rendah (< 5%) — tidak peduli mean_error
+  UNCERTAIN   : kondisi lainnya (5% – 8%)
+
+Catatan perubahan:
+  - Threshold AUTHENTIC dinaikkan dari 2% ke 5% untuk mengakomodasi
+    foto asli yang sudah melalui kompresi platform (GDrive, WhatsApp, dll.)
 =============================================================================
 """
 
@@ -24,9 +28,12 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_QUALITY      = 90
 AMPLIFY_FACTOR       = 15
-THRESHOLD_SUSPICIOUS = 0.08   # rasio piksel mencurigakan
+THRESHOLD_SUSPICIOUS = 0.08   # rasio piksel mencurigakan → MANIPULATED
 THRESHOLD_MEAN_HIGH  = 180.0  # mean error tinggi (foto kamera modern bisa 100-170)
 THRESHOLD_MEAN_LOW   = 175.0  # batas bawah untuk AUTHENTIC
+THRESHOLD_AUTHENTIC  = 0.05   # suspicious ratio maks untuk verdict AUTHENTIC
+                               # dinaikkan dari 0.02 → 0.05 agar foto dari
+                               # GDrive/WhatsApp/media sosial tidak masuk UNCERTAIN
 
 
 @dataclass
@@ -85,15 +92,17 @@ def analyze_ela(image_path: str, quality: int = DEFAULT_QUALITY,
         notes.append(f"Piksel mencurigakan: {suspicious_ratio:.2%}")
         notes.append(f"Mean error tinggi ({mean_error:.2f}) — inkonsistensi kompresi.")
 
-    # AUTHENTIC: suspicious RENDAH (tidak peduli mean error)
-    elif suspicious_ratio < 0.02:
+    # AUTHENTIC: suspicious RENDAH — threshold 5% untuk akomodasi foto dari platform
+    elif suspicious_ratio < THRESHOLD_AUTHENTIC:
         verdict    = "AUTHENTIC"
-        confidence = min(1.0, (1 - suspicious_ratio / 0.02) * 0.8 + 0.2)
-        notes.append(f"Suspicious ratio sangat rendah ({suspicious_ratio:.2%}) — tidak ada manipulasi.")
+        confidence = min(1.0, (1 - suspicious_ratio / THRESHOLD_AUTHENTIC) * 0.8 + 0.2)
+        notes.append(f"Suspicious ratio rendah ({suspicious_ratio:.2%}) — tidak ada manipulasi.")
         if mean_error > 50:
-            notes.append(f"Mean error tinggi ({mean_error:.2f}) akibat kompresi kamera, bukan manipulasi.")
+            notes.append(f"Mean error {mean_error:.2f} — wajar akibat kompresi kamera atau platform.")
+        if suspicious_ratio > 0.02:
+            notes.append(f"Catatan: foto kemungkinan sudah melalui kompresi platform (GDrive/WhatsApp).")
 
-    # UNCERTAIN: suspicious sedang atau kondisi ambigu
+    # UNCERTAIN: suspicious sedang (5% – 8%) atau kondisi ambigu
     else:
         verdict    = "UNCERTAIN"
         confidence = 0.5
