@@ -123,10 +123,8 @@ html, body, [class*="css"] { font-family: 'Plus Jakarta Sans', sans-serif; }
 
 .section-lbl { font-size:.7rem;color:#4f46e5;text-transform:uppercase;letter-spacing:.15em;
                font-family:'JetBrains Mono',monospace;font-weight:600;margin-bottom:.4rem; }
-
-#MainMenu{visibility:hidden;}footer{visibility:hidden;}.stDeployButton{display:none;}
-
-/* -- MOBILE RESPONSIVE -- */
+            
+/* ── MOBILE RESPONSIVE ── */
 @media (max-width: 768px) {
     [data-testid="stSidebar"] {
         width: 85vw !important;
@@ -155,6 +153,8 @@ html, body, [class*="css"] { font-family: 'Plus Jakarta Sans', sans-serif; }
         font-size: 0.75rem !important;
     }
 }
+            
+#MainMenu{visibility:hidden;}footer{visibility:hidden;}.stDeployButton{display:none;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -235,9 +235,9 @@ with st.sidebar:
     </div>""", unsafe_allow_html=True)
 
     st.markdown("**Mode Analisis**")
-    force_mode = st.radio(
+    force_mode = st.selectbox(
         "Pilih mode:",
-        ["🤖 Otomatis (deteksi jenis gambar)", "📄 Mode Dokumen", "📷 Mode Foto"],
+        ["📷 Mode Foto", "📄 Mode Dokumen", "🤖 Otomatis (deteksi jenis gambar)"],
         help="Otomatis: sistem mendeteksi sendiri apakah gambar dokumen atau foto."
     )
 
@@ -251,6 +251,13 @@ with st.sidebar:
     multi_q = st.multiselect("Kualitas perbandingan:",
                               [70, 75, 80, 85, 90, 95], default=[70, 80, 90, 95])
 
+    st.divider()
+    st.markdown("""
+    <div style='font-size:.72rem;color:#1e293b;line-height:1.7'>
+    <b style='color:#334155'>Kelompok 7</b><br>
+    Ilmu Komputer — UNIMED 2026<br>
+    Dosen: Dr. Hermawan Syahputra
+    </div>""", unsafe_allow_html=True)
 
 
 # ---------------------------------------------------------------------------
@@ -570,4 +577,3 @@ try:
     os.unlink(tmp_path)
 except Exception:
     pass
-
