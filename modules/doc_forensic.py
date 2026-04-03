@@ -272,7 +272,7 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
         if block_variance > 0.3:
             notes.append(f"⚠ Blok kompresi tidak seragam (skor: {block_variance:.2f}) — indikasi konten disisipkan.")
 
-    elif manip_score <= 0.45:
+    elif manip_score <= 0.55:
         verdict = "DOC_AUTHENTIC"
         risk = "LOW"
         confidence = min(1.0, 1.0 - manip_score)
