@@ -125,6 +125,36 @@ html, body, [class*="css"] { font-family: 'Plus Jakarta Sans', sans-serif; }
                font-family:'JetBrains Mono',monospace;font-weight:600;margin-bottom:.4rem; }
 
 #MainMenu{visibility:hidden;}footer{visibility:hidden;}.stDeployButton{display:none;}
+
+/* -- MOBILE RESPONSIVE -- */
+@media (max-width: 768px) {
+    [data-testid="stSidebar"] {
+        width: 85vw !important;
+        min-width: 85vw !important;
+    }
+    [data-testid="stSidebar"] > div {
+        padding: 1rem 0.8rem !important;
+    }
+    .stat-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .app-header {
+        padding: 1.2rem 1.2rem 1rem !important;
+    }
+    .app-header h1 {
+        font-size: 1.2rem !important;
+    }
+    .feat-name {
+        width: 130px !important;
+        font-size: 0.7rem !important;
+    }
+    .vcard h2 {
+        font-size: 1.1rem !important;
+    }
+    .mode-banner {
+        font-size: 0.75rem !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -540,3 +570,4 @@ try:
     os.unlink(tmp_path)
 except Exception:
     pass
+
