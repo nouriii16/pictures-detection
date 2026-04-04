@@ -251,9 +251,10 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
     # Edge anomaly dihapus dari scoring karena tidak reliable untuk foto
     # yang sudah dikompresi platform (GDrive, WhatsApp, Telegram)
     manip_score = (
-        suspicious_ratio / 0.06 * 0.85 +
-        block_variance * 0.10 +
-        color_jump * 0.05
+        suspicious_ratio / 0.06 * 0.70 +
+        (1 - bg_consistency) * 0.20 +
+        block_variance * 0.07 +
+        color_jump * 0.03
     )
     manip_score = min(1.0, float(manip_score))
 
