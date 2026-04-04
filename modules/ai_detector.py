@@ -104,7 +104,7 @@ def analyze_ai_statistical(image_path: str) -> AIDetectionResult:
 
         notes = []
 
-        if ai_prob >= 0.70:
+        if ai_prob >= 0.80:
             verdict    = "AI_GENERATED"
             confidence = ai_prob
             notes.append(f"Model deep learning mendeteksi pola AI-generated (prob={ai_prob:.1%}).")
