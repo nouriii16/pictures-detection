@@ -70,7 +70,7 @@ def make_ai_image(path="demo_ai.png"):
 def run_demo():
     print("\n" + "="*62)
     print("  DEMO — Sistem Deteksi Manipulasi Citra Digital")
-    print("  ELA + AI Detection | Kelompok 7 UNIMED 2026")
+    print("  ELA + AI Detection ")
     print("="*62)
 
     p_photo   = make_photo()
