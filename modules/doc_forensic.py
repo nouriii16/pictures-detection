@@ -249,11 +249,11 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
     # ── SCORING GABUNGAN ─────────────────────────────────────────────────────
     # Bobot: ELA(35%) + Background(25%) + Edge(20%) + Block(15%) + Color(5%)
     manip_score = (
-    suspicious_ratio / 0.06 * 0.25 +          # ELA (turun)
-    (1 - bg_consistency) * 0.40 +              # Background (naik — indikator terkuat)
-    edge_anomaly * 0.20 +                       # Anomali tepi teks
-    block_variance * 0.10 +                     # Variansi blok
-    color_jump * 0.05                           # Lompatan warna
+    suspicious_ratio / 0.06 * 0.25 +
+    (1 - bg_consistency) * 0.45 +
+    edge_anomaly * 0.12 +
+    block_variance * 0.13 +
+    color_jump * 0.05
     )
     manip_score = min(1.0, float(manip_score))
 
@@ -271,7 +271,7 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
         if block_variance > 0.3:
             notes.append(f"⚠ Blok kompresi tidak seragam (skor: {block_variance:.2f}) — indikasi konten disisipkan.")
 
-    elif manip_score <= 0.25:
+    elif manip_score <= 0.35:
         verdict = "DOC_AUTHENTIC"
         risk = "LOW"
         confidence = min(1.0, 1.0 - manip_score)
