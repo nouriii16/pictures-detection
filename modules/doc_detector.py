@@ -136,7 +136,7 @@ def detect_image_type(image_path: str) -> DocDetectionResult:
         reasons.append(f"tepi sangat tajam ({edge_sharpness:.2f})")
 
     doc_score = min(1.0, doc_score)
-    is_doc = doc_score >= 0.60
+    is_doc = doc_score >= 0.45
 
     if is_doc:
         image_type = "DOCUMENT"
