@@ -156,7 +156,7 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
     manip_score = min(1.0, float(manip_score))
 
     # Verdict
-    if manip_score >= 0.65:
+    if manip_score >= 0.75:
         verdict = "DOC_MANIPULATED"
         risk = "HIGH"
         confidence = min(1.0, manip_score)
@@ -169,7 +169,7 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
         if block_variance > 0.3:
             notes.append(f"⚠ Blok kompresi tidak seragam (skor: {block_variance:.2f}) — indikasi konten disisipkan.")
 
-    elif manip_score <= 0.55:
+    elif manip_score <= 0.62:
         verdict = "DOC_AUTHENTIC"
         risk = "LOW"
         confidence = min(1.0, 1.0 - manip_score)
