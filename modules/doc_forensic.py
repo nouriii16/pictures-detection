@@ -217,6 +217,14 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
         DocForensicResult dengan verdict dan metrik detail
     """
     img = Image.open(image_path).convert("RGB")
+
+    MAX_SIZE = 1500  # maksimal 1500px di sisi terpanjang
+    if max(img.size) > MAX_SIZE:
+        ratio = MAX_SIZE / max(img.size)
+        new_size = (int(img.size[0] * ratio), int(img.size[1] * ratio))
+        img = img.resize(new_size, Image.LANCZOS)
+        logger.info(f"Gambar diresize dari {img.size} ke {new_size}")
+        
     arr = np.array(img, dtype=np.float32)
     notes = []
 

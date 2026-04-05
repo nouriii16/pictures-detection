@@ -58,6 +58,13 @@ def compute_ela(image_path: str, quality: int = DEFAULT_QUALITY,
         raise FileNotFoundError(f"File tidak ditemukan: {image_path}")
 
     original = Image.open(image_path).convert("RGB")
+
+    MAX_SIZE = 1500
+    if max(original.size) > MAX_SIZE:
+        ratio = MAX_SIZE / max(original.size)
+        new_size = (int(original.size[0] * ratio), int(original.size[1] * ratio))
+        original = original.resize(new_size, Image.LANCZOS)
+        
     buf = io.BytesIO()
     original.save(buf, format="JPEG", quality=quality)
     buf.seek(0)

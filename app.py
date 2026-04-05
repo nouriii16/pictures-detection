@@ -182,7 +182,7 @@ with col_btn:
     run = st.button("🔬  Analisis Sekarang", width='stretch')
 
 if sz > 2048:
-    st.warning("⚠️ Ukuran file >2MB — analisis mungkin lebih lambat.")
+    st.warning("⚠️ Ukuran file >2MB — gambar akan diresize otomatis untuk mempercepat analisis.")
 
 if not run:
     col_prev, _ = st.columns([1, 1])
