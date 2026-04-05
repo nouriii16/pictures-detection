@@ -32,11 +32,18 @@ def _get_model():
             import torch
             from transformers import AutoImageProcessor, SiglipForImageClassification
 
-            logger.info("Loading model Ateeqq/ai-vs-human-image-detector...")
-            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            logger.info("Loading model...")
+            device = torch.device("cpu")  # paksa CPU untuk Streamlit Cloud
 
-            processor = AutoImageProcessor.from_pretrained("Ateeqq/ai-vs-human-image-detector")
-            model = SiglipForImageClassification.from_pretrained("Ateeqq/ai-vs-human-image-detector")
+            processor = AutoImageProcessor.from_pretrained(
+                "Ateeqq/ai-vs-human-image-detector",
+                use_fast=True
+            )
+            model = SiglipForImageClassification.from_pretrained(
+                "Ateeqq/ai-vs-human-image-detector",
+                torch_dtype=torch.float32,
+                low_cpu_mem_usage=True   # ← tambahkan ini untuk hemat memory
+            )
             model.to(device)
             model.eval()
 
@@ -44,7 +51,7 @@ def _get_model():
             logger.info("Model berhasil di-load!")
 
         except Exception as e:
-            logger.warning(f"Gagal load model HuggingFace: {e}")
+            logger.warning(f"Gagal load model: {e}")
             _model_data = None
 
     return _model_data

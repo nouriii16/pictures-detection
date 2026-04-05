@@ -179,7 +179,7 @@ with col_info:
                 f'<b style="color:#334155">{uploaded.name}</b> &nbsp;·&nbsp; {sz:.1f} KB</div>',
                 unsafe_allow_html=True)
 with col_btn:
-    run = st.button("🔬  Analisis Sekarang", use_container_width=True)
+    run = st.button("🔬  Analisis Sekarang", width='stretch')
 
 if sz > 2048:
     st.warning("⚠️ Ukuran file >2MB — analisis mungkin lebih lambat.")
@@ -187,7 +187,7 @@ if sz > 2048:
 if not run:
     col_prev, _ = st.columns([1, 1])
     with col_prev:
-        st.image(Image.open(tmp_path), caption="Preview", use_container_width=True)
+        st.image(Image.open(tmp_path), caption="Preview", width='stretch')
     st.stop()
 
 prog = st.progress(0, "Mendeteksi jenis gambar...")
@@ -233,13 +233,13 @@ if is_document_mode:
     tab_ela, tab_overlay, tab_metrics, tab_report = st.tabs(["📊 ELA Map Dokumen", "🎯 Area Mencurigakan", "📈 Metrik Chart", "📄 Laporan"])
 
     with tab_ela:
-        st.image(img_doc_ela, use_container_width=True)
+        st.image(img_doc_ela, width='stretch')
         st.caption("Kiri: dokumen asli · Tengah: ELA map (kualitas 95) · Kanan: heatmap intensitas error")
     with tab_overlay:
-        st.image(img_doc_overlay, use_container_width=True)
+        st.image(img_doc_overlay, width='stretch')
         st.caption(f"Area merah = piksel dengan error ELA di atas mean + 2σ ({doc_result.ela_suspicious_ratio:.2%} dari total piksel)")
     with tab_metrics:
-        st.image(img_doc_metrics, use_container_width=True)
+        st.image(img_doc_metrics, width='stretch')
         st.markdown("""
         **Panduan membaca metrik:**
         - **ELA Suspicious Ratio** — proporsi piksel dengan inkonsistensi kompresi. Threshold: 6%
@@ -254,9 +254,9 @@ if is_document_mode:
         base = os.path.splitext(uploaded.name)[0]
         c1, c2 = st.columns(2)
         with c1:
-            st.download_button("⬇ Laporan TXT", report_text.encode(), f"laporan_dokumen_{base}.txt", "text/plain", use_container_width=True)
+            st.download_button("⬇ Laporan TXT", report_text.encode(), f"laporan_dokumen_{base}.txt", "text/plain", width='stretch')
         with c2:
-            st.download_button("⬇ ELA Map PNG", img_doc_ela, f"ela_dokumen_{base}.png", "image/png", use_container_width=True)
+            st.download_button("⬇ ELA Map PNG", img_doc_ela, f"ela_dokumen_{base}.png", "image/png", width='stretch')
 
     st.info("⚠️ **Disclaimer:** Sistem ini bersifat indikatif. Untuk keperluan hukum, hasil harus dikonfirmasi dengan dokumen asli.")
 
@@ -298,19 +298,19 @@ else:
     tab_ela, tab_mask, tab_mq, tab_ai, tab_report = st.tabs(["📊 ELA Map", "🎯 Area Mencurigakan", "🔬 Multi-Kualitas", "🤖 AI Scores Chart", "📄 Laporan"])
 
     with tab_ela:
-        st.image(img_ela, use_container_width=True)
+        st.image(img_ela, width='stretch')
         st.caption("Kiri: citra asli · Tengah: ELA map · Kanan: heatmap intensitas error")
     with tab_mask:
-        st.image(img_mask, use_container_width=True)
+        st.image(img_mask, width='stretch')
         st.caption(f"Area merah = piksel dengan error di atas mean + 2σ ({ela_result.suspicious_ratio:.2%} dari total piksel)")
     with tab_mq:
         if img_mq:
-            st.image(img_mq, use_container_width=True)
+            st.image(img_mq, width='stretch')
             st.caption("Inkonsistensi error antar kualitas = indikasi manipulasi kuat")
         else:
             st.info("Pilih minimal satu kualitas di sidebar.")
     with tab_ai:
-        st.image(img_ai, use_container_width=True)
+        st.image(img_ai, width='stretch')
         st.markdown("""
         **Panduan membaca skor:**
         - **Noise Frekuensi DCT** — Foto AI sangat halus (minim noise frekuensi tinggi)
@@ -325,13 +325,13 @@ else:
         c1, c2, c3 = st.columns(3)
         base = os.path.splitext(uploaded.name)[0]
         with c1:
-            st.download_button("⬇ Laporan TXT", report_text.encode(), f"laporan_{base}.txt", "text/plain", use_container_width=True)
+            st.download_button("⬇ Laporan TXT", report_text.encode(), f"laporan_{base}.txt", "text/plain", width='stretch')
         with c2:
             ela_buf = io.BytesIO()
             ela_result.ela_image.save(ela_buf, "PNG"); ela_buf.seek(0)
-            st.download_button("⬇ ELA Map PNG", ela_buf, f"ela_map_{base}.png", "image/png", use_container_width=True)
+            st.download_button("⬇ ELA Map PNG", ela_buf, f"ela_map_{base}.png", "image/png", width='stretch')
         with c3:
-            st.download_button("⬇ Visualisasi ELA", img_ela, f"visualisasi_{base}.png", "image/png", use_container_width=True)
+            st.download_button("⬇ Visualisasi ELA", img_ela, f"visualisasi_{base}.png", "image/png", width='stretch')
 
 try:
     os.unlink(tmp_path)
