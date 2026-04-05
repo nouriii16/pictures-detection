@@ -308,6 +308,10 @@ with col_info:
 with col_btn:
     run = st.button("🔬  Analisis Sekarang", use_container_width=True)
 
+if sz > 2048:
+    st.warning("⚠️ Ukuran file >2MB — analisis mungkin lebih lambat. "
+               "Disarankan kompres foto terlebih dahulu.")
+
 if not run:
     col_prev, _ = st.columns([1, 1])
     with col_prev:
