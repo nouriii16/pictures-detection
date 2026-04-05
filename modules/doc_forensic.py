@@ -249,16 +249,16 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
     # ── SCORING GABUNGAN ─────────────────────────────────────────────────────
     # Bobot: ELA(35%) + Background(25%) + Edge(20%) + Block(15%) + Color(5%)
     manip_score = (
-        suspicious_ratio / 0.06 * 0.35 +          # ELA
-        (1 - bg_consistency) * 0.25 +              # Background inkonsisten
-        edge_anomaly * 0.20 +                       # Anomali tepi teks
-        block_variance * 0.15 +                     # Variansi blok
-        color_jump * 0.05                           # Lompatan warna
+    suspicious_ratio / 0.06 * 0.25 +          # ELA (turun)
+    (1 - bg_consistency) * 0.40 +              # Background (naik — indikator terkuat)
+    edge_anomaly * 0.20 +                       # Anomali tepi teks
+    block_variance * 0.10 +                     # Variansi blok
+    color_jump * 0.05                           # Lompatan warna
     )
     manip_score = min(1.0, float(manip_score))
 
     # ── VERDICT ──────────────────────────────────────────────────────────────
-    if manip_score >= 0.55:
+    if manip_score >= 0.50:
         verdict = "DOC_MANIPULATED"
         risk = "HIGH"
         confidence = min(1.0, manip_score)
