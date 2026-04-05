@@ -266,7 +266,7 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
     manip_score = min(1.0, float(manip_score))
 
     # ── VERDICT ──────────────────────────────────────────────────────────────
-    if manip_score >= 0.55:
+    if manip_score >= 0.50:
         verdict = "DOC_MANIPULATED"
         risk = "HIGH"
         confidence = min(1.0, manip_score)
