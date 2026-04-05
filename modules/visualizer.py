@@ -39,9 +39,26 @@ def _fig_to_bytes(fig) -> bytes:
     return buf.read()
 
 
+def _load_image_matching_ela(image_path: str, ela_array: np.ndarray) -> np.ndarray:
+    """
+    Load gambar asli dan resize agar ukurannya sama dengan ela_array.
+    Ini diperlukan karena ela.py mungkin meresize gambar sebelum analisis.
+    """
+    img = Image.open(image_path).convert("RGB")
+    ela_h, ela_w = ela_array.shape[:2]
+    if img.size != (ela_w, ela_h):
+        img = img.resize((ela_w, ela_h), Image.LANCZOS)
+    return np.array(img)
+
+
 def render_ela_panels(result, bg="#0a0e1a") -> bytes:
     """3 panel ELA: asli, ELA map, heatmap."""
+    # Load original dengan ukuran yang matching ela_array
     original = Image.open(result.image_path).convert("RGB")
+    ela_h, ela_w = result.ela_array.shape[:2]
+    if original.size != (ela_w, ela_h):
+        original = original.resize((ela_w, ela_h), Image.LANCZOS)
+
     ela_gray = result.ela_array.mean(axis=2)
 
     fig = plt.figure(figsize=(15, 5), facecolor=bg)
@@ -70,8 +87,17 @@ def render_ela_panels(result, bg="#0a0e1a") -> bytes:
 
 def render_mask_overlay(result, bg="#0a0e1a") -> bytes:
     """Overlay mask area mencurigakan."""
-    original  = np.array(Image.open(result.image_path).convert("RGB"))
+    # Gunakan helper untuk pastikan ukuran sama
+    original  = _load_image_matching_ela(result.image_path, result.ela_array)
     ela_gray  = result.ela_array.mean(axis=2)
+
+    # Pastikan ela_gray dan original punya ukuran yang sama
+    if ela_gray.shape[:2] != original.shape[:2]:
+        ela_h, ela_w = original.shape[:2]
+        ela_img = Image.fromarray(ela_gray.astype(np.uint8))
+        ela_img = ela_img.resize((ela_w, ela_h), Image.LANCZOS)
+        ela_gray = np.array(ela_img, dtype=np.float32)
+
     mask      = ela_gray > (result.mean_error + 2 * result.std_error)
     overlay   = original.copy().astype(np.float32)
     overlay[mask, 0]  = 255
@@ -118,7 +144,6 @@ def render_ai_scores(ai_result, bg="#0a0e1a") -> bytes:
     """Bar chart skor fitur AI detection."""
     scores = ai_result.scores
     if "ml_raw_probability" in scores:
-        # Model ML — tampilkan gauge sederhana
         fig, ax = plt.subplots(figsize=(8, 3), facecolor=bg)
         ax.set_facecolor(bg)
         prob = scores["ml_raw_probability"]
