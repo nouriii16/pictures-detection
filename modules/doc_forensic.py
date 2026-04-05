@@ -147,16 +147,31 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
     block_variance = _analyze_block_variance(ela_arr)
     color_jump = _analyze_color_jumps(arr)
 
-    # Scoring — ELA dominant 85%, hapus bg_consistency
+    # ── EXIF CHECK ───────────────────────────────────────────────────────────
+    # Screenshot asli dari HP selalu punya metadata EXIF
+    # Dokumen dari generator/template biasanya tidak punya EXIF
+    has_exif = False
+    try:
+        from PIL.ExifTags import TAGS
+        img_orig = Image.open(image_path)
+        exif_data = img_orig._getexif()
+        has_exif = exif_data is not None and len(exif_data) > 2
+    except Exception:
+        has_exif = False
+
+    # Scoring — ELA dominant, bonus EXIF
     manip_score = (
         suspicious_ratio / 0.06 * 0.85 +
         block_variance * 0.10 +
         color_jump * 0.05
     )
+    # Kurangi skor jika ada EXIF (tanda screenshot asli dari HP)
+    if has_exif:
+        manip_score = manip_score * 0.75
     manip_score = min(1.0, float(manip_score))
 
     # Verdict
-    if manip_score >= 0.75:
+    if manip_score >= 0.60:
         verdict = "DOC_MANIPULATED"
         risk = "HIGH"
         confidence = min(1.0, manip_score)
@@ -169,7 +184,7 @@ def analyze_document(image_path: str, quality: int = 95) -> DocForensicResult:
         if block_variance > 0.3:
             notes.append(f"⚠ Blok kompresi tidak seragam (skor: {block_variance:.2f}) — indikasi konten disisipkan.")
 
-    elif manip_score <= 0.62:
+    elif manip_score <= 0.45:
         verdict = "DOC_AUTHENTIC"
         risk = "LOW"
         confidence = min(1.0, 1.0 - manip_score)
